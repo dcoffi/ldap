@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from ScrapyCoffi.views import mostrarusuarioldap
+from ScrapyCoffi.views import mostrarusuarioldap, homeView
 from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.conf import settings
@@ -23,6 +23,7 @@ from django.conf import settings
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^test', mostrarusuarioldap),
-    url(r'^login/$', auth_views.LoginView.as_view(template_name='login.html', success_url), name='login'),
+    url(r'^login/$', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    url(r'^$', homeView, name='home'), 
     url(r'^logout/$', auth_views.logout, {'template_name': 'logged_out.html'}, name='logout'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -19,4 +19,8 @@ def mostrarusuarioldap(request):
     valor = conn.entries
     ctx={'usuarios' : valor}
     return render(request=request, context=ctx, template_name='usuarios.html')
-#def milogin(request):
+
+
+@login_required(login_url='login')
+def homeView(request):
+    return render(request=request, context={'user': request.user}, template_name='home.html')
