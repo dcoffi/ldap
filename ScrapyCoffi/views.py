@@ -12,7 +12,7 @@ def mostrarusuarioldap(request):
     tls_configuration = Tls( validate=ssl.CERT_REQUIRED, version=ssl.PROTOCOL_TLSv1 )
     tls_configuration.validate = ssl.CERT_NONE
     server = Server( 'ldaps://172.24.3.3:636', use_ssl=True, tls=tls_configuration )
-    conn = Connection( server, 'cn=dcoffi,ou=dtsc,ou=admin,ou=ccs,o=bcv', 'jeanandry28', auto_bind=True )
+    conn = Connection( server, 'contexto', 'password', auto_bind=True )
     conn.search( 'O=BCV', '(fullname=' + usuario + '*)',
                  attributes=['fullName', 'telephoneNumber', 'title', 'workforceID', 'l', 'mail', 'ou',
                              'passwordExpirationTime'] )
