@@ -1,10 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  {% load staticfiles %}
+	<meta charset="utf-8">
+	<title>Consulta LDAP</title>
+
+	<!-- Google Fonts -->
+	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700|Lato:400,100,300,700,900' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href=" {% static 'css/animate.css' %}">
+	<!-- Custom Stylesheet -->
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+	<script src=" {% static 'js/jquery.min.js' %}"></script>
 </head>
 <body>
-    Hello {{ user }}
+<div class="container">
+		<div class="top">
+			<h2 id="title" >Bienvenido,  <span>{{ user.get_full_name }}</span></span></h2>
+            <h2 id="title" ><a href="{% url 'logout' %}">Cerrar Sesión</a></h2>
+		</div>
+<div class="login-box animated fadeInUp">
+			<div class="box-header" >
+				<h2>Búsqueda de usuarios</h2>
+			</div>
+    <form name="miformulario" method="post" action="#">
+				{% csrf_token %}
+
+			<label>Coloque un nombre de usuario</label><input type="text" name="elusuario">
+			<br/>
+
+			<br/>
+			<button type="submit">Buscar</button>
+			<br/>
+
+		</form>
+    {% if resultados %}
+    <table border="1">
+        <tr><th>Nombre Completo</th><th>Nombre de Usuario<br>CI</th><th>Ubicación</th><th>mail</th><th>Departamento</th><th>Telefónos</th><th>Cargo</th><th>Tiempo de expiración de la clave</th><th>Post Office</th></tr>
+
+        {% for resultado in resultados %}
+
+            <tr><td>{{ resultado.fullName.value }}</td>
+                <td>{%    for valor in resultado.cn.value %}
+                           {{ valor }}<br>
+                    {%    endfor   %}
+                </td><td>{{ resultado.l.value }}</td>
+                <td>{{ resultado.mail.value }}</td>
+                <td>{{ resultado.ou.value }}</td>
+                {% if resultado.telephoneNumber|length > 1 %}
+                <td>{%    for valor in resultado.telephoneNumber.value %}
+                           {{ valor }}<br>
+                    {%    endfor   %}
+                </td>
+                {% else %}
+                <td>{{ resultado.telephoneNumber.value }}</td>
+                {% endif %}
+                <td>{{ resultado.title.value }}</td>
+                <td>{{ resultado.passwordExpirationTime.value }}</td>
+                <td>{{ resultado.nGWGroupWiseID.value }}</td>
+            </tr>
+
+        {% endfor %}
+    </table>
+
+    {% else %}
+    {% if post %}
+        No hay registros que coincidan con la búsqueda.
+    {% endif %}
+    {% endif %}
+		</div>
+	</div>
+
 </body>
+
 </html>

@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import ldap
+import logging
+from django_auth_ldap.config import LDAPSearch, LDAPGroupQuery, GroupOfNamesType
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -27,18 +30,42 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#AUTHENTICATION_BACKENDS = (
+#    'django.contrib.auth.backends.ModelBackend',
+#)
+AUTHENTICATION_BACKENDS = ('django_auth_ldap.backend.LDAPBackend',)
 
-# Application definition
+AUTH_LDAP_SERVER_URI = "ldap://172.24.3.3"
 
-INSTALLED_APPS = [
+AUTH_LDAP_BIND_DN = "CN=DCOFFI,OU=DTSC,OU=ADMIN,OU=CCS,O=BCV"
+AUTH_LDAP_BIND_PASSWORD = "password"
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch("cn=GRP-LINUX,ou=GroupWise,ou=Recursos,ou=CCS,o=BCV",
+    ldap.SCOPE_SUBTREE, "(objectClass=groupWiseDistributionList)"
+)
+AUTH_LDAP_GROUP_TYPE = GroupOfNamesType()
+AUTH_LDAP_REQUIRE_GROUP = LDAPGroupQuery("cn=GRP-LINUX,ou=GroupWise,ou=Recursos,ou=CCS,o=BCV")
+
+AUTH_LDAP_USER_SEARCH = LDAPSearch("o=bcv",
+    ldap.SCOPE_SUBTREE, "(cn=%(user)s)")
+AUTH_LDAP_USER_ATTR_MAP = {"first_name":"fullName"}
+AUTH_LDAP_CONNECTION_OPTIONS = {
+    ldap.OPT_DEBUG_LEVEL: 1,
+    ldap.OPT_REFERRALS: 0,
+}
+
+logger = logging.getLogger('django_auth_ldap')
+logger.addHandler(logging.StreamHandler())
+logger.setLevel(logging.DEBUG)
+INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ScrapyCoffi'
-]
+    'ScrapyCoffi',
+    'django_python3_ldap',
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -108,7 +135,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-ve'
 
 TIME_ZONE = 'UTC'
 
@@ -128,3 +155,4 @@ STATICFILES_DIRS = (
 )
 
 LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'

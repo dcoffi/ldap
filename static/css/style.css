@@ -68,10 +68,10 @@ p.small {
 
 .login-box {
 	background-color: white;
-	max-width: 340px;
+	max-width: 80%;
 	margin: 0 auto;
 	position: relative;
-	top: 80px;
+	top: 0px;
 	padding-bottom: 30px;
 	border-radius: 5px;
 	box-shadow: 0 5px 50px rgba(0,0,0,0.4);

@@ -9,11 +9,11 @@
 	<!-- Google Fonts -->
 	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700|Lato:400,100,300,700,900' rel='stylesheet' type='text/css'>
 
-	<link rel="stylesheet" href=" {% static "css/animate.css" %}">
+	<link rel="stylesheet" href=" {% static 'css/animate.css' %}">
 	<!-- Custom Stylesheet -->
-	<link rel="stylesheet" href="{% static "css/style.css" %}">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src=" {% static 'js/jquery.min.js' %}"></script>
 </head>
 
 <body>
@@ -27,13 +27,14 @@
 			</div>
 			<form name="formulario" method="post" action="#">
 				{% csrf_token %}
-			<label for="username">Nombre de Usuario</label>
+			{{ form.username.label_tag }}
 			<br/>
-			<input type="text" id="username">
+
+			{{ form.username }}
 			<br/>
-			<label for="password">Contraseña</label>
+			{{ form.password.label_tag }}
 			<br/>
-			<input type="password" id="password">
+			{{ form.password }}
 			<br/>
 			<button type="submit">Entrar</button>
 			<br/>
